@@ -1,0 +1,22 @@
+
+
+/**
+ * Função para buscar todas as postagens.
+ * Chama o endpoint que usa a função getAllPosts(limit) do seu backend.
+ */
+export async function buscarTodosPosts(limit = 10) {
+    try {
+        
+        const response = await fetch(`${BASE_URL}/posts.php?limit=${limit}`);
+
+        if (!response.ok) {
+            throw new Error('Falha ao carregar as postagens.');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Erro ao buscar posts:', error);
+        throw error;
+    }
+}
