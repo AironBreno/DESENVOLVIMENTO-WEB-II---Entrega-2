@@ -1,0 +1,54 @@
+// 1. Importa a função de API
+import { fazerLogin } from './api.js';
+
+// 2. Obtém referências aos elementos do DOM
+const loginForm = document.getElementById('loginForm');
+const mensagemErro = document.getElementById('mensagemErro');
+
+// Função para limpar a mensagem de erro
+function limparErro() {
+    mensagemErro.textContent = '';
+    mensagemErro.style.display = 'none';
+}
+
+// Função para exibir erro
+function exibirErro(mensagem) {
+    mensagemErro.textContent = mensagem;
+    mensagemErro.style.display = 'block';
+}
+
+// 3. Adiciona o listener para o evento de submissão do formulário
+loginForm.addEventListener('submit', async (e) => {
+    // Impede o envio padrão do formulário (que recarregaria a página)
+    e.preventDefault();
+    
+    limparErro();
+
+    // 4. Pega os valores do formulário
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
+
+    if (!email || !senha) {
+        exibirErro('Por favor, preencha todos os campos.');
+        return;
+    }
+
+    // 5. Chama a função de login
+    try {
+        const dadosUsuario = await fazerLogin(email, senha);
+        
+        // 6. Sucesso no Login
+        console.log('Login realizado com sucesso! Dados do usuário:', dadosUsuario);
+        
+        // Armazenar informações do usuário (Token ou ID) no localStorage, se necessário
+        localStorage.setItem('user_id', dadosUsuario.id); 
+        
+        // Redireciona para a página principal (o feed de posts)
+        window.location.href = 'feed.html'; // Próxima página que iremos criar
+
+    } catch (error) {
+        // 7. Erro no Login
+        // Exibe a mensagem de erro da função de API
+        exibirErro(error.message || 'Erro de conexão ou credenciais inválidas.');
+    }
+});
