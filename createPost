@@ -1,0 +1,30 @@
+// ... (mantenha as funções fazerLogin, buscarTodosPosts e cadastrarUsuario)
+
+/**
+ * Função para criar uma nova postagem.
+ * Chama o endpoint que usa a função createPost(dados post, dados usuario) do seu backend.
+ * @param {object} postData - Objeto contendo titulo, corpo e user_id.
+ */
+export async function criarPostagem(postData) {
+    try {
+        // Assume que você tem um endpoint de criação de post (ex: /posts.php)
+        const response = await fetch(`${BASE_URL}/posts.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(postData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Falha ao criar postagem.');
+        }
+
+        return data; // Deve retornar o ID do novo post ou uma mensagem de sucesso
+    } catch (error) {
+        console.error('Erro ao criar postagem:', error);
+        throw error;
+    }
+}
