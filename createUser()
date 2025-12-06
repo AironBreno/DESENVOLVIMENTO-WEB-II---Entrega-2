@@ -1,0 +1,31 @@
+// ... (mantenha as funções fazerLogin e buscarTodosPosts)
+
+/**
+ * Função para criar um novo usuário.
+ * Chama o endpoint que usa a função createUser(dados) do seu backend.
+ * @param {object} userData - Objeto contendo nome, sobrenome, email, senha, biografia, avatar_url.
+ */
+export async function cadastrarUsuario(userData) {
+    try {
+        // Assume que você tem um endpoint de cadastro (ex: /register.php)
+        const response = await fetch(`${BASE_URL}/register.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            // Se o backend retornar um erro (ex: e-mail já cadastrado), o status não será 2xx
+            throw new Error(data.message || 'Falha ao cadastrar usuário.');
+        }
+
+        return data; // Deve retornar o ID do novo usuário ou uma mensagem de sucesso
+    } catch (error) {
+        console.error('Erro ao cadastrar:', error);
+        throw error;
+    }
+}
